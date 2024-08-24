@@ -2,6 +2,8 @@
 const { DataTypes } = require('sequelize')
 
 const sequelize = require('../../config/database')
+const room = require('./room')
+
 const user = sequelize.define(
 	'User',
 	{
@@ -67,5 +69,8 @@ const user = sequelize.define(
 		modelName: 'User',
 	}
 )
+
+user.hasMany(room, { foreignKey: 'ownerId' })
+room.belongsTo(user, { foreignKey: 'ownerId' })
 
 module.exports = user
