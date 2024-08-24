@@ -2,18 +2,14 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
 	async up(queryInterface, Sequelize) {
-		await queryInterface.createTable('users', {
+		await queryInterface.createTable('User', {
 			id: {
 				allowNull: false,
-				autoIncrement: true,
 				primaryKey: true,
-				type: Sequelize.INTEGER,
+				type: Sequelize.UUID,
+				defaultValue: Sequelize.UUIDV4,
 			},
-			firstName: {
-				type: Sequelize.STRING,
-				allowNull: false,
-			},
-			lastName: {
+			fullName: {
 				type: Sequelize.STRING,
 				allowNull: false,
 			},
@@ -21,7 +17,7 @@ module.exports = {
 				type: Sequelize.INTEGER,
 			},
 			gender: {
-				type: Sequelize.ENUM('male', 'female', 'other'),
+				type: Sequelize.ENUM('male', 'female'),
 			},
 			email: {
 				type: Sequelize.STRING,
@@ -58,6 +54,6 @@ module.exports = {
 		})
 	},
 	async down(queryInterface, Sequelize) {
-		await queryInterface.dropTable('users')
+		await queryInterface.dropTable('User')
 	},
 }

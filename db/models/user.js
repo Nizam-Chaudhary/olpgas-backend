@@ -3,7 +3,7 @@ const { DataTypes } = require('sequelize')
 
 const sequelize = require('../../config/database')
 const user = sequelize.define(
-	'user',
+	'User',
 	{
 		id: {
 			allowNull: false,
@@ -64,7 +64,7 @@ const user = sequelize.define(
 	{
 		paranoid: true,
 		freezeTableName: true,
-		modelName: 'user',
+		modelName: 'User',
 	}
 )
 
