@@ -1,7 +1,9 @@
 require('dotenv').config({ path: `${process.cwd()}/.env` })
 const PORT = process.env.PORT || 3000
 const express = require('express')
+const globalErrorHandler = require('./controller/errorController')
 const app = express()
+const AppError = require('./utils/appError')
 
 // enable json parsing
 app.use(express.json())
@@ -9,23 +11,18 @@ app.use(express.json())
 // enable body parsing
 app.use(express.urlencoded({ extended: false }))
 
-app.use('*', (req, res) => {
-	res.status(200).json({
-		message: 'Resource not found',
-	})
+// fallback route
+app.get('/', (req, res) => {
+	res.send('Hello')
 })
 
-app.use((error, req, res) => {
-	console.error(error)
-	res.status(500).json({
-		message: 'Internal Server Error',
-	})
+app.use('*', () => {
+	throw new AppError('Resource not found')
 })
 
-const startServer = async () => {
-	app.listen(PORT, () => {
-		console.log(`Server is live on http://localhost:${PORT}`)
-	})
-}
+// Global Error Handler
+app.use(globalErrorHandler)
 
-startServer()
+app.listen(PORT, () => {
+	console.log(`server is listening on http://localhost:${PORT}`)
+})
