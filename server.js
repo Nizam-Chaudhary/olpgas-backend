@@ -1,5 +1,5 @@
-require('dotenv').config({ path: `${process.cwd()}/.env` })
-const PORT = process.env.PORT || 3000
+require('dotenv').config()
+const PORT = process.env.APP_PORT
 const express = require('express')
 const globalErrorHandler = require('./controller/errorController')
 const app = express()

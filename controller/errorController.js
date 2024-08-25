@@ -1,8 +1,14 @@
-require('dotenv').config({ path: `${process.cwd()}/.env` })
-//const AppError = require('../utils/appError')
+require('dotenv').config()
+const AppError = require('../utils/appError')
 
 const globalErrorHandler = (err, req, res, next) => {
 	console.error(err)
+	if (err.name === 'SequelizeUniqueConstraintError') {
+		err = new AppError(err.errors[0].message, 400)
+	}
+	if (err.name === 'SequelizeValidationError') {
+		err = new AppError(err.errors[0].message, 400)
+	}
 	if (process.env.NODE_ENV === 'development') {
 		return sendErrorDev(err, res)
 	}
