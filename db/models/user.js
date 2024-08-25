@@ -9,15 +9,11 @@ const user = sequelize.define(
 	{
 		id: {
 			allowNull: false,
-			autoIncrement: true,
 			primaryKey: true,
-			type: DataTypes.INTEGER,
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 		},
-		firstName: {
-			type: DataTypes.STRING,
-			allowNull: false,
-		},
-		lastName: {
+		fullName: {
 			type: DataTypes.STRING,
 			allowNull: false,
 		},
@@ -25,7 +21,7 @@ const user = sequelize.define(
 			type: DataTypes.INTEGER,
 		},
 		gender: {
-			type: DataTypes.ENUM('male', 'female', 'other'),
+			type: DataTypes.ENUM('male', 'female'),
 		},
 		email: {
 			type: DataTypes.STRING,

@@ -11,11 +11,12 @@ app.use(express.json())
 // enable body parsing
 app.use(express.urlencoded({ extended: false }))
 
-// fallback route
-app.get('/', (req, res) => {
-	res.send('Hello')
-})
+// Routes
+const authRoute = require('./route/authRoute')
 
+app.use('/api/v1/auth', authRoute)
+
+// fallback route
 app.use('*', () => {
 	throw new AppError('Resource not found')
 })
