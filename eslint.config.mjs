@@ -15,7 +15,7 @@ export default [
 					caughtErrors: 'all',
 					ignoreRestSiblings: false,
 					reportUsedIgnorePattern: false,
-					argsIgnorePattern: 'next',
+					argsIgnorePattern: ['err', 'req', 'res', 'next'],
 				},
 			],
 		},
