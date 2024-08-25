@@ -1,26 +1,26 @@
 {
-  "name": "olpgas-backend",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "nodemon server.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@eslint/js": "^9.9.0",
-    "eslint": "^9.9.0",
-    "globals": "^15.9.0",
-    "nodemon": "^3.1.4",
-    "sequelize-cli": "^6.6.2"
-  },
-  "dependencies": {
-    "dotenv": "^16.4.5",
-    "express": "^4.19.2",
-    "pg": "^8.12.0",
-    "pg-hstore": "^2.3.4",
-    "sequelize": "^6.37.3"
-  }
+	"name": "olpgas-backend",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"start": "nodemon server.js"
+	},
+	"keywords": [],
+	"author": "Nizam Chaudhary",
+	"license": "ISC",
+	"description": "",
+	"dependencies": {
+		"dotenv": "^16.4.5",
+		"express": "^4.19.2",
+		"pg": "^8.12.0",
+		"pg-hstore": "^2.3.4",
+		"sequelize": "^6.37.3"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.9.0",
+		"eslint": "^9.9.0",
+		"globals": "^15.9.0",
+		"nodemon": "^3.1.4",
+		"sequelize-cli": "^6.6.2"
+	}
 }
