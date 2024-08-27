@@ -13,8 +13,10 @@ app.use(express.urlencoded({ extended: false }))
 
 // Routes
 const authRoute = require('./route/authRoute')
+const userRoute = require('./route/userRoute')
 
 app.use('/api/v1/auth', authRoute)
+app.use('/api/v1/user', userRoute)
 
 // fallback route
 app.use('*', () => {
