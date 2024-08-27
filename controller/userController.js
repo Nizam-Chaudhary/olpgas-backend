@@ -1,6 +1,7 @@
 const catchAsync = require('../utils/catchAsync')
 const user = require('../db/models/user')
 const AppError = require('../utils/appError')
+const bcrypt = require('bcrypt')
 
 const getUserDetail = catchAsync(async (req, res) => {
 	const id = req.user.id
@@ -46,4 +47,22 @@ const updateUserDetail = catchAsync(async (req, res) => {
 	})
 })
 
-module.exports = { getUserDetail, updateUserDetail }
+const deleteUser = catchAsync(async (req, res) => {
+	const id = req.user.id
+	const password = req.body.password
+
+	let result = await user.findByPk(id)
+
+	if (!bcrypt.compareSync(password, result.password)) {
+		throw new AppError('Incorrect Password', 401)
+	}
+
+	result.destroy()
+
+	return res.status(200).json({
+		status: 'success',
+		message: 'User deleted successfully',
+	})
+})
+
+module.exports = { getUserDetail, updateUserDetail, deleteUser }
