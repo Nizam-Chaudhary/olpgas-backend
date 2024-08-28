@@ -55,6 +55,10 @@ module.exports = {
 				allowNull: false,
 				type: Sequelize.INTEGER,
 			},
+			imageUrls: {
+				allowNull: false,
+				type: Sequelize.ARRAY(Sequelize.BLOB),
+			},
 			createdAt: {
 				allowNull: false,
 				type: Sequelize.DATE,

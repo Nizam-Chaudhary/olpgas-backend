@@ -56,6 +56,10 @@ const roomDetail = sequelize.define(
 			allowNull: false,
 			type: DataTypes.INTEGER,
 		},
+		images: {
+			allowNull: false,
+			type: DataTypes.ARRAY(DataTypes.BLOB),
+		},
 		createdAt: {
 			allowNull: false,
 			type: DataTypes.DATE,

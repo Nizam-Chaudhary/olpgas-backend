@@ -14,9 +14,11 @@ app.use(express.urlencoded({ extended: false }))
 // Routes
 const authRoute = require('./route/authRoute')
 const userRoute = require('./route/userRoute')
+const roomRoute = require('./route/roomRoute')
 
 app.use('/api/v1/auth', authRoute)
 app.use('/api/v1/user', userRoute)
+app.use('/api/v1/room', roomRoute)
 
 // fallback route
 app.use('*', () => {
