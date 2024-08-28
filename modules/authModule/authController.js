@@ -1,8 +1,8 @@
-const catchAsync = require('../utils/catchAsync')
-const user = require('../db/models/user')
+const catchAsync = require('../../utils/catchAsync')
+const user = require('../../db/models/user')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const AppError = require('../utils/appError')
+const AppError = require('../../utils/appError')
 
 const signup = catchAsync(async (req, res) => {
 	const input = req.body

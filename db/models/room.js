@@ -2,7 +2,7 @@
 const { DataTypes } = require('sequelize')
 
 const sequelize = require('../../config/database')
-const roomDetail = require('./roomdetail')
+const roomDetail = require('./roomDetail')
 
 const room = sequelize.define(
 	'Room',

@@ -1,6 +1,6 @@
-const catchAsync = require('../utils/catchAsync')
-const user = require('../db/models/user')
-const AppError = require('../utils/appError')
+const catchAsync = require('../../utils/catchAsync')
+const user = require('../../db/models/user')
+const AppError = require('../../utils/appError')
 const bcrypt = require('bcrypt')
 
 const getUserDetail = catchAsync(async (req, res) => {
