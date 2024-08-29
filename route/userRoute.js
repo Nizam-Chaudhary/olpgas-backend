@@ -1,15 +1,15 @@
-const router = require('express').Router()
+const router = require("express").Router();
 const {
 	getUserDetail,
 	updateUserDetail,
 	deleteUser,
-} = require('../controller/userController')
-const validateToken = require('../middleware/authMiddleware')
+} = require("../modules/userModule/userController");
+const validateToken = require("../middleware/authMiddleware");
 
 router
-	.route('/')
+	.route("/")
 	.get(validateToken, getUserDetail)
 	.patch(validateToken, updateUserDetail)
-	.delete(validateToken, deleteUser)
+	.delete(validateToken, deleteUser);
 
-module.exports = router
+module.exports = router;

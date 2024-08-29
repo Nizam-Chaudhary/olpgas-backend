@@ -1,6 +1,6 @@
-const catchAsync = require('../../utils/catchAsync')
-const roomDetail = require('../../db/models/roomDetail')
-const room = require('../../db/models/room')
+const catchAsync = require("../../utils/catchAsync");
+const roomDetail = require("../../db/models/roomDetail");
+const room = require("../../db/models/room");
 
 class RoomService {
 	addRoomDetails = async (body) => {
@@ -16,8 +16,8 @@ class RoomService {
 			features: body.features,
 			ratings: body.ratings,
 			images: body.images,
-		})
-	}
+		});
+	};
 
 	addRoom = async (body, roomId) => {
 		return await room.create({
@@ -30,8 +30,8 @@ class RoomService {
 			occupiedBy: body.occupiedBy,
 			roomFeatureId: roomId,
 			ownerId: body.ownerId,
-		})
-	}
+		});
+	};
 
 	updateRoom = async (body, roomId, roomDetailId) => {
 		await roomDetail.update(
@@ -50,8 +50,8 @@ class RoomService {
 			},
 			{
 				where: { id: roomDetailId },
-			}
-		)
+			},
+		);
 
 		await room.update(
 			{
@@ -67,18 +67,18 @@ class RoomService {
 			},
 			{
 				where: { id: roomId },
-			}
-		)
+			},
+		);
 
-		return
-	}
+		return;
+	};
 
 	getRoom = async (id, page, limit) => {
-		const offset = (page - 1) * limit
+		const offset = (page - 1) * limit;
 
-		let whereClause
+		let whereClause;
 		if (!id) {
-			whereClause = { id: id }
+			whereClause = { id: id };
 		}
 
 		return await room.findAndCountAll({
@@ -88,15 +88,15 @@ class RoomService {
 			where: whereClause,
 			limit: limit,
 			offset: offset,
-		})
-	}
+		});
+	};
 
 	deleteRoom = async (id) => {
 		await room.destroy({
 			where: { id: id },
-		})
-		return
-	}
+		});
+		return;
+	};
 }
 
-module.exports = RoomService
+module.exports = RoomService;
