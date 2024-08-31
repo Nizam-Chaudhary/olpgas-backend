@@ -45,8 +45,6 @@ module.exports = {
 					model: 'User',
 					key: 'id',
 				},
-				onDelete: 'CASCADE',
-				onUpdate: 'CASCADE',
 			},
 			createdAt: {
 				allowNull: false,

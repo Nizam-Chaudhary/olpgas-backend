@@ -1,18 +1,17 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize')
 
-const sequelize = require("../../config/database");
+const sequelize = require('../../config/database')
 
 const roomDetail = sequelize.define(
-	"RoomDetail",
+	'RoomDetail',
 	{
 		id: {
 			allowNull: false,
 			primaryKey: true,
 			type: DataTypes.UUID,
-			defaultValue: DataTypes.UUIDV4,
 			references: {
-				model: "Room",
-				key: "roomFeatureId",
+				model: 'Room',
+				key: 'roomFeatureId',
 			},
 		},
 		roomArea: {
@@ -20,14 +19,14 @@ const roomDetail = sequelize.define(
 			type: DataTypes.INTEGER,
 			validate: {
 				notNull: {
-					msg: "Room area is required",
+					msg: 'Room area is required',
 				},
 				notEmpty: {
-					msg: "Room area cannot be empty",
+					msg: 'Room area cannot be empty',
 				},
 				min: {
 					args: [100],
-					msg: "Room area must be greater than 100",
+					msg: 'Room area must be greater than 100',
 				},
 			},
 		},
@@ -40,19 +39,11 @@ const roomDetail = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "Occupancy is required",
+					msg: 'Occupancy is required',
 				},
 				notEmpty: {
-					msg: "Occupancy cannot be empty",
+					msg: 'Occupancy cannot be empty',
 				},
-			},
-			min: {
-				args: [1],
-				msg: "Occupancy must be greater than 1",
-			},
-			max: {
-				args: [100],
-				msg: "Occupancy must be less than 100",
 			},
 		},
 		roomType: {
@@ -60,10 +51,10 @@ const roomDetail = sequelize.define(
 			type: DataTypes.STRING,
 			validate: {
 				notNull: {
-					msg: "Room type is required",
+					msg: 'Room type is required',
 				},
 				notEmpty: {
-					msg: "Room type cannot be empty",
+					msg: 'Room type cannot be empty',
 				},
 			},
 		},
@@ -72,10 +63,10 @@ const roomDetail = sequelize.define(
 			type: DataTypes.DOUBLE,
 			validate: {
 				notNull: {
-					msg: "Rent amount is required",
+					msg: 'Rent amount is required',
 				},
 				notEmpty: {
-					msg: "Rent amount cannot be empty",
+					msg: 'Rent amount cannot be empty',
 				},
 			},
 		},
@@ -84,10 +75,10 @@ const roomDetail = sequelize.define(
 			type: DataTypes.DOUBLE,
 			validate: {
 				notNull: {
-					msg: "Deposit is required",
+					msg: 'Deposit is required',
 				},
 				notEmpty: {
-					msg: "Deposit cannot be empty",
+					msg: 'Deposit cannot be empty',
 				},
 			},
 		},
@@ -96,22 +87,26 @@ const roomDetail = sequelize.define(
 			type: DataTypes.TEXT,
 			validate: {
 				notNull: {
-					msg: "Description is required",
+					msg: 'Description is required',
 				},
 				notEmpty: {
-					msg: "Description cannot be empty",
+					msg: 'Description cannot be empty',
 				},
 			},
 		},
 		suitableFor: {
 			allowNull: false,
-			type: DataTypes.STRING,
+			type: DataTypes.ARRAY(DataTypes.STRING),
 			validate: {
 				notNull: {
-					msg: "Suitable for is required",
+					msg: 'Suitable for is required',
 				},
 				notEmpty: {
-					msg: "Suitable for cannot be empty",
+					msg: 'Suitable for cannot be empty',
+				},
+				min: {
+					args: 1,
+					msg: 'Please add suitable for',
 				},
 			},
 		},
@@ -120,34 +115,35 @@ const roomDetail = sequelize.define(
 			type: DataTypes.ARRAY(DataTypes.STRING),
 			validate: {
 				notNull: {
-					msg: "Features is required",
+					msg: 'Features is required',
 				},
 				notEmpty: {
-					msg: "Features cannot be empty",
+					msg: 'Features cannot be empty',
+				},
+				min: {
+					args: 1,
+					msg: 'Please add suitable for',
 				},
 			},
 		},
 		ratings: {
 			allowNull: false,
-			type: DataTypes.INTEGER,
+			type: DataTypes.DOUBLE,
 			validate: {
 				notNull: {
-					msg: "Ratings is required",
+					msg: 'Ratings is required',
 				},
 				notEmpty: {
-					msg: "Ratings cannot be empty",
+					msg: 'Ratings cannot be empty',
 				},
 			},
 		},
-		images: {
-			allowNull: false,
+		imageUrls: {
+			allowNull: true,
 			type: DataTypes.ARRAY(DataTypes.BLOB),
 			validate: {
-				notNull: {
-					msg: "Images is required",
-				},
 				notEmpty: {
-					msg: "Images cannot be empty",
+					msg: 'Images cannot be empty',
 				},
 			},
 		},
@@ -166,8 +162,8 @@ const roomDetail = sequelize.define(
 	{
 		paranoid: true,
 		freezeTableName: true,
-		modelName: "Room",
-	},
-);
+		modelName: 'Room',
+	}
+)
 
-module.exports = roomDetail;
+module.exports = roomDetail

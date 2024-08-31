@@ -3,10 +3,10 @@ const AppError = require('../../utils/appError')
 const RoomService = require('./roomService')
 
 const addRoom = catchAsync(async (req, res) => {
-	const roomDetail = await RoomService.addRoomDetails(req.body)
-	const room = await RoomService.addRoom(req.body, roomDetail.id)
+	console.log(req.user)
+	const roomRes = await RoomService.addRoom(req.body, req.user.id)
 
-	if (!room) {
+	if (!roomRes) {
 		throw new AppError('Error adding room', 400)
 	}
 
@@ -40,10 +40,7 @@ const getRoom = catchAsync(async (req, res) => {
 		throw new AppError('No room found', 400)
 	}
 
-	return res.status(200).json({
-		status: 'success',
-		rooms: result,
-	})
+	return res.status(200).json(result)
 })
 
 const deleteRoom = catchAsync(async (req, res) => {

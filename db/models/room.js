@@ -1,10 +1,10 @@
-const { DataTypes } = require("sequelize");
+const { DataTypes } = require('sequelize')
 
-const sequelize = require("../../config/database");
-const roomDetail = require("./roomDetail");
+const sequelize = require('../../config/database')
+const roomDetail = require('./roomDetail')
 
 const room = sequelize.define(
-	"Room",
+	'Room',
 	{
 		id: {
 			allowNull: false,
@@ -17,10 +17,10 @@ const room = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "Room name cannot be null",
+					msg: 'Room name cannot be null',
 				},
 				notEmpty: {
-					msg: "Room name cannot be empty",
+					msg: 'Room name cannot be empty',
 				},
 			},
 		},
@@ -29,10 +29,10 @@ const room = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "Address cannot be null",
+					msg: 'Address cannot be null',
 				},
 				notEmpty: {
-					msg: "Address cannot be empty",
+					msg: 'Address cannot be empty',
 				},
 			},
 		},
@@ -41,10 +41,10 @@ const room = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "City cannot be null",
+					msg: 'City cannot be null',
 				},
 				notEmpty: {
-					msg: "City cannot be empty",
+					msg: 'City cannot be empty',
 				},
 			},
 		},
@@ -53,45 +53,26 @@ const room = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "State cannot be null",
+					msg: 'State cannot be null',
 				},
 				notEmpty: {
-					msg: "State cannot be empty",
+					msg: 'State cannot be empty',
 				},
 			},
 		},
 		bookingStatus: {
-			type: DataTypes.ENUM("empty", "partial", "full"),
+			type: DataTypes.ENUM('empty', 'partial', 'full'),
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "Booking status cannot be null",
+					msg: 'Booking status cannot be null',
 				},
 				isIn: {
-					args: [["empty", "partial", "full"]],
-					msg: "Booking status must be one of: empty, partial, full",
+					args: [['empty', 'partial', 'full']],
+					msg: 'Booking status must be one of: empty, partial, full',
 				},
 				notEmpty: {
-					msg: "Booking status cannot be empty",
-				},
-			},
-		},
-		occupancy: {
-			type: DataTypes.INTEGER,
-			allowNull: false,
-			validate: {
-				notNull: {
-					msg: "Occupancy cannot be null",
-				},
-				isInt: {
-					msg: "Occupancy must be an integer",
-				},
-				min: {
-					args: [0],
-					msg: "Occupancy cannot be less than 0",
-				},
-				notEmpty: {
-					msg: "Occupancy cannot be empty",
+					msg: 'Booking status cannot be empty',
 				},
 			},
 		},
@@ -100,53 +81,38 @@ const room = sequelize.define(
 			allowNull: false,
 			validate: {
 				notNull: {
-					msg: "Occupied by cannot be null",
+					msg: 'Occupied by cannot be null',
 				},
 				isInt: {
-					msg: "Occupied by must be an integer",
+					msg: 'Occupied by must be an integer',
 				},
 				min: {
 					args: [0],
-					msg: "Occupied by cannot be less than 0",
+					msg: 'Occupied by cannot be less than 0',
 				},
 				notEmpty: {
-					msg: "Occupied by cannot be empty",
+					msg: 'Occupied by cannot be empty',
 				},
 			},
 		},
 		roomFeatureId: {
-			type: DataTypes.UUID,
 			allowNull: false,
-			validate: {
-				notNull: {
-					msg: "Room feature ID cannot be null",
-				},
-				isUUID: {
-					args: 4,
-					msg: "Room feature ID must be a valid UUID",
-				},
-				notEmpty: {
-					msg: "Room feature ID cannot be empty",
-				},
-			},
+			type: DataTypes.UUID,
+			defaultValue: DataTypes.UUIDV4,
 		},
 		ownerId: {
 			type: DataTypes.UUID,
 			allowNull: false,
-			references: {
-				model: "User",
-				key: "id",
-				validate: {
-					notNull: {
-						msg: "Owner ID cannot be null",
-					},
-					isUUID: {
-						args: 4,
-						msg: "Owner ID must be a valid UUID",
-					},
-					notEmpty: {
-						msg: "Owner ID cannot be empty",
-					},
+			validate: {
+				notNull: {
+					msg: 'Owner ID cannot be null',
+				},
+				isUUID: {
+					args: 4,
+					msg: 'Owner ID must be a valid UUID',
+				},
+				notEmpty: {
+					msg: 'Owner ID cannot be empty',
 				},
 			},
 		},
@@ -165,11 +131,11 @@ const room = sequelize.define(
 	{
 		paranoid: true,
 		freezeTableName: true,
-		modelName: "Room",
-	},
-);
+		modelName: 'Room',
+	}
+)
 
-room.hasOne(roomDetail, { foreignKey: "id" });
-roomDetail.belongsTo(room, { foreignKey: "id" });
+room.hasOne(roomDetail, { foreignKey: 'id', sourceKey: 'roomFeatureId' })
+roomDetail.belongsTo(room, { foreignKey: 'id' })
 
-module.exports = room;
+module.exports = room

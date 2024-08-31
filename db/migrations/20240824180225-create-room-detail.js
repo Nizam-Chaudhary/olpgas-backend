@@ -7,13 +7,10 @@ module.exports = {
 				allowNull: false,
 				primaryKey: true,
 				type: Sequelize.UUID,
-				defaultValue: Sequelize.UUIDV4,
 				references: {
 					model: 'Room',
 					key: 'roomFeatureId',
 				},
-				onDelete: 'CASCADE',
-				onUpdate: 'CASCADE',
 			},
 			roomArea: {
 				allowNull: false,
@@ -45,7 +42,7 @@ module.exports = {
 			},
 			suitableFor: {
 				allowNull: false,
-				type: Sequelize.STRING,
+				type: Sequelize.ARRAY(Sequelize.STRING),
 			},
 			features: {
 				allowNull: false,
@@ -53,10 +50,10 @@ module.exports = {
 			},
 			ratings: {
 				allowNull: false,
-				type: Sequelize.INTEGER,
+				type: Sequelize.DOUBLE,
 			},
 			imageUrls: {
-				allowNull: false,
+				allowNull: true,
 				type: Sequelize.ARRAY(Sequelize.BLOB),
 			},
 			createdAt: {
