@@ -1,6 +1,7 @@
 const catchAsync = require('../../utils/catchAsync')
 const AppError = require('../../utils/appError')
 const RoomService = require('./roomService')
+const roomDetail = require('../../db/models/roomDetail')
 
 const addRoom = catchAsync(async (req, res) => {
 	console.log(req.user)
@@ -20,7 +21,7 @@ const updateRoom = catchAsync(async (req, res) => {
 	await RoomService.updateRoom(
 		req.body,
 		req.params.roomId,
-		req.params.roomDetailId
+		req.params.roomDetailId,
 	)
 
 	return res.status(200).json({
@@ -33,7 +34,7 @@ const getRoom = catchAsync(async (req, res) => {
 	const result = await RoomService.getRoom(
 		req.query.id,
 		req.query.page,
-		req.query.limit
+		req.query.limit,
 	)
 
 	if (!result) {
@@ -44,11 +45,9 @@ const getRoom = catchAsync(async (req, res) => {
 })
 
 const deleteRoom = catchAsync(async (req, res) => {
-	await RoomService.deleteRoom(req.params.id)
-	return res.status(200).json({
-		status: 'success',
-		message: 'Room deleted successfully',
-	})
+	const { roomId, roomDetailId } = req.query
+	const response = await RoomService.deleteRoom(roomId, roomDetailId)
+	return res.status(200).json(response)
 })
 
 module.exports = { addRoom, updateRoom, getRoom, deleteRoom }
