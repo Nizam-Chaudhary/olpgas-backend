@@ -9,9 +9,8 @@ const validateToken = require('../middleware/authMiddleware')
 
 router.route('/').get(validateToken, getRoom).post(validateToken, addRoom)
 
-router
-	.route('/:id')
-	.put(validateToken, updateRoom)
-	.delete(validateToken, deleteRoom)
+router.route('/:id').put(validateToken, updateRoom)
+
+router.route('/').delete(validateToken, deleteRoom)
 
 module.exports = router
