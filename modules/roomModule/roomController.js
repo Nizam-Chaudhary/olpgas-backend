@@ -5,29 +5,19 @@ const roomDetail = require('../../db/models/roomDetail')
 
 const addRoom = catchAsync(async (req, res) => {
 	console.log(req.user)
-	const roomRes = await RoomService.addRoom(req.body, req.user.id)
+	const response = await RoomService.addRoom(req.body, req.user.id)
 
-	if (!roomRes) {
+	if (!response) {
 		throw new AppError('Error adding room', 400)
 	}
 
-	return res.status(200).json({
-		status: 'success',
-		message: 'Room added successfully',
-	})
+	return res.status(200).json(response)
 })
 
 const updateRoom = catchAsync(async (req, res) => {
-	await RoomService.updateRoom(
-		req.body,
-		req.params.roomId,
-		req.params.roomDetailId,
-	)
+	const response = await RoomService.updateRoom(req.body, req.params.id)
 
-	return res.status(200).json({
-		status: 'success',
-		message: 'Room updated successfully',
-	})
+	return res.status(200).json(response)
 })
 
 const getRoom = catchAsync(async (req, res) => {
@@ -45,8 +35,7 @@ const getRoom = catchAsync(async (req, res) => {
 })
 
 const deleteRoom = catchAsync(async (req, res) => {
-	const { roomId, roomDetailId } = req.query
-	const response = await RoomService.deleteRoom(roomId, roomDetailId)
+	const response = await RoomService.deleteRoom(req.params.id)
 	return res.status(200).json(response)
 })
 

@@ -6,110 +6,95 @@ const sequelize = require('../../config/database')
 
 class RoomService {
 	addRoom = async (body, ownerId) => {
-		const transaction = sequelize.transaction()
+		const transaction = await sequelize.transaction()
+		try {
+			const roomRes = (
+				await room.create(
+					{
+						roomName: body.roomName,
+						address: body.address,
+						city: body.city,
+						state: body.state,
+						bookingStatus: body.bookingStatus,
+						occupiedBy: body.occupiedBy,
+						ownerId: ownerId,
+					},
+					{ transaction },
+				)
+			).toJSON()
 
-		await room
-			.create(
-				{
-					roomName: body.roomName,
-					address: body.address,
-					city: body.city,
-					state: body.state,
-					bookingStatus: body.bookingStatus,
-					occupiedBy: body.occupiedBy,
-					ownerId: ownerId,
-				},
-				{ transaction },
-			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error adding room', 400)
-			})
+			const roomDetailRes = (
+				await roomDetail.create(
+					{
+						id: roomRes.roomFeatureId,
+						roomArea: body.roomArea,
+						shareable: body.shareable,
+						occupancy: body.occupancy,
+						roomType: body.roomType,
+						rentAmount: body.rentAmount,
+						deposit: body.deposit,
+						description: body.description,
+						suitableFor: body.suitableFor,
+						features: body.features,
+						ratings: body.ratings,
+						imageUrls: body.imageUrls,
+					},
+					{ transaction },
+				)
+			).toJSON()
 
-		if (!roomRes) {
-			throw new AppError('Error adding room', 400)
+			await transaction.commit()
+
+			return {
+				status: 'success',
+				message: 'Room added successfully',
+				room: { room: roomRes, roomDetail: roomDetailRes },
+			}
+		} catch (err) {
+			await transaction.rollback()
+			throw err
 		}
-
-		await roomDetail
-			.create(
-				{
-					id: roomRes.roomFeatureId,
-					roomArea: body.roomArea,
-					shareable: body.shareable,
-					occupancy: body.occupancy,
-					roomType: body.roomType,
-					rentAmount: body.rentAmount,
-					deposit: body.deposit,
-					description: body.description,
-					suitableFor: body.suitableFor,
-					features: body.features,
-					ratings: body.ratings,
-					imageUrls: body.imageUrls,
-				},
-				{ transaction },
-			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error adding room', 400)
-			})
-
-		await transaction.commit()
-
-		return true
 	}
 
-	updateRoom = async (body, roomId, roomDetailId) => {
-		const transaction = sequelize.transaction()
-		await roomDetail
-			.update(
-				{
-					roomArea: body.roomArea,
-					shareable: body.shareable,
-					occupancy: body.occupancy,
-					roomType: body.roomType,
-					rentAmount: body.rentAmount,
-					deposit: body.deposit,
-					description: body.description,
-					suitableFor: body.suitableFor,
-					features: body.features,
-					ratings: body.ratings,
-					images: body.images,
-				},
-				{
-					where: { id: roomDetailId },
-				},
-				{ transaction },
-			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error updating room', 400)
-			})
+	updateRoom = async (body, roomId) => {
+		const transaction = await sequelize.transaction()
+		try {
+			const roomRes = await room.findByPk(roomId)
 
-		await room
-			.update(
-				{
-					roomName: body.roomName,
-					address: body.address,
-					city: body.city,
-					state: body.state,
-					bookingStatus: body.bookingStatus,
-					occupancy: body.occupancy,
-					occupiedBy: body.occupiedBy,
-					roomFeatureId: roomId,
-					ownerId: body.ownerId,
-				},
-				{
-					where: { id: roomId },
-				},
-				{ transaction },
-			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error updating room', 400)
-			})
+			roomRes.roomName = body.roomName || roomRes.roomName
+			roomRes.address = body.address || roomRes.address
+			roomRes.city = body.city || roomRes.city
+			roomRes.state = body.state || roomRes.state
+			roomRes.bookingStatus = body.bookingStatus || roomRes.bookingStatus
+			roomRes.occupancy = body.occupancy || roomRes.occupancy
+			roomRes.occupiedBy = body.occupiedBy || roomRes.occupiedBy
 
-		return {
-			message: 'Room update successfully',
+			await roomRes.save({ transaction })
+
+			const roomDetailRes = await roomDetail.findByPk(roomRes.roomFeatureId)
+
+			roomDetailRes.roomArea = body.roomArea || roomDetailRes.roomArea
+			roomDetailRes.shareable = body.shareable || roomDetailRes.shareable
+			roomDetailRes.occupancy = body.occupancy || roomDetailRes.occupancy
+			roomDetailRes.roomType = body.roomType || roomDetailRes.roomType
+			roomDetailRes.rentAmount = body.rentAmount || roomDetailRes.rentAmount
+			roomDetailRes.deposit = body.deposit || roomDetailRes.deposit
+			roomDetailRes.description = body.description || roomDetailRes.description
+			roomDetailRes.suitableFor = body.suitableFor || roomDetailRes.suitableFor
+			roomDetailRes.features = body.features || roomDetailRes.features
+			roomDetailRes.ratings = body.ratings || roomDetailRes.ratings
+			roomDetailRes.images = body.images || roomDetailRes.images
+
+			await roomDetailRes.save({ transaction })
+
+			await transaction.commit()
+			return {
+				status: 'success',
+				message: 'Room updated successfully',
+			}
+		} catch (err) {
+			await transaction.rollback()
+			throw err
 		}
 	}
 
@@ -139,39 +124,31 @@ class RoomService {
 		}
 	}
 
-	deleteRoom = async (roomId, roomDetailId) => {
-		const transaction = sequelize.transaction()
-		await room
-			.destroy(
-				{
-					where: { id: roomId, roomDetailId },
-				},
-				{ transaction },
-			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error removing room', 400)
-			})
+	deleteRoom = async (id) => {
+		const transaction = await sequelize.transaction()
+		try {
+			const roomRes = await room.findByPk(id)
 
-		await roomDetail
-			.destroy(
+			await roomDetail.destroy(
 				{
 					where: {
-						id: roomDetailId,
+						id: roomRes.roomFeatureId,
 					},
 				},
 				{ transaction },
 			)
-			.catch(async (err) => {
-				await transaction.rollback()
-				throw new AppError('Error removing room', 400)
-			})
 
-		await transaction.commit()
+			await roomRes.destroy({ transaction })
 
-		return {
-			status: 'success',
-			message: 'Room removed successfully',
+			await transaction.commit()
+
+			return {
+				status: 'success',
+				message: 'Room removed successfully',
+			}
+		} catch (err) {
+			await transaction.rollback()
+			throw err
 		}
 	}
 }
