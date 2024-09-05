@@ -163,7 +163,7 @@ const roomDetail = sequelize.define(
 		paranoid: true,
 		freezeTableName: true,
 		modelName: 'Room',
-	}
+	},
 )
 
 module.exports = roomDetail
