@@ -8,4 +8,8 @@ router
 	.post(validateToken, RoomBookingController.addRoomBooking)
 	.get(validateToken, RoomBookingController.getRoomBookingHistory)
 
+router
+	.route('/:id')
+	.delete(validateToken, RoomBookingController.cancelRoomBooking)
+
 module.exports = router

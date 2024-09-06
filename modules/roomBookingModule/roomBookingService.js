@@ -87,6 +87,46 @@ class RoomBookingService {
 			roomBookingsHistory: rows,
 		}
 	}
+
+	cancelRoomBooking = async (roomBookingId) => {
+		const transaction = await sequelize.transaction()
+		try {
+			const roomBookingRes = await roomBooking.findByPk(roomBookingId)
+
+			if (!roomBookingRes) {
+				throw new AppError('Room booking not found', 400)
+			}
+
+			if (roomBookingRes.paymentStatus === 'paid') {
+				throw new AppError('Cannot cancel booking for paid booking', 400)
+			}
+
+			if (moment().isAfter(moment(roomBookingRes.payDate))) {
+				throw new AppError(
+					'Room Booking cannot be canceled already past due date',
+					400,
+				)
+			}
+
+			// update occupied By in room table
+			console.log(roomBookingRes.toJSON())
+			const roomRes = await room.findByPk(roomBookingRes.roomId)
+			roomRes.occupiedBy =
+				roomRes.occupiedBy - roomBookingRes.totalPersonBookedFor
+
+			await roomRes.save({ transaction })
+
+			await roomBookingRes.destroy({ transaction })
+			await transaction.commit()
+			return {
+				status: 'success',
+				message: 'Room Booking cancelled successfully',
+			}
+		} catch (error) {
+			await transaction.rollback()
+			throw error
+		}
+	}
 }
 
 module.exports = new RoomBookingService()

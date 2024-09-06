@@ -33,6 +33,18 @@ class RoomBookingController {
 
 		return res.status(201).json(roomBookingHistoryRes)
 	})
+
+	cancelRoomBooking = catchAsync(async (req, res) => {
+		const { id } = req.params
+		const roomBookingCancellationRes =
+			await RoomBookingService.cancelRoomBooking(id)
+
+		if (!roomBookingCancellationRes) {
+			throw new AppError('Error cancelling room booking', 400)
+		}
+
+		return res.status(201).json(roomBookingCancellationRes)
+	})
 }
 
 module.exports = new RoomBookingController()
