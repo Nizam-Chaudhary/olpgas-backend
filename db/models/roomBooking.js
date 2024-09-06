@@ -1,11 +1,11 @@
 'use strict'
-const DataTypes = require('DataTypes')
 
 const user = require('./user')
 const room = require('./room')
+const { DataTypes } = require('sequelize')
 const sequelize = require('../../config/database')
 
-const roomBooking = sequelize.define(
+const RoomBookings = sequelize.define(
 	'RoomBookings',
 	{
 		id: {
@@ -30,6 +30,10 @@ const roomBooking = sequelize.define(
 			type: DataTypes.FLOAT,
 			allowNull: false,
 		},
+		depositAmount: {
+			type: DataTypes.FLOAT,
+			allowNull: false,
+		},
 		payDate: {
 			type: DataTypes.DATE,
 			allowNull: false,
@@ -37,6 +41,7 @@ const roomBooking = sequelize.define(
 		paymentStatus: {
 			type: DataTypes.ENUM('paid', 'pending'),
 			allowNull: false,
+			defaultValue: 'pending',
 		},
 		createdAt: {
 			type: DataTypes.DATEONLY,
@@ -54,17 +59,16 @@ const roomBooking = sequelize.define(
 		},
 	},
 	{
-		DataTypes,
-		modelName: 'RoomBookings',
-		tableName: 'RoomBookings',
 		paranoid: true,
+		freezeTableName: true,
+		modelName: 'RoomBookings',
 	},
 )
 
-user.hasMany(roomBooking, { foreignKey: 'userId' })
-room.hasMany(roomBooking, { foreignKey: 'roomId' })
+user.hasMany(RoomBookings, { foreignKey: 'userId' })
+room.hasMany(RoomBookings, { foreignKey: 'roomId' })
 
-roomBooking.belongsTo(user, { foreignKey: 'userId' })
-roomBooking.belongsTo(room, { foreignKey: 'roomId' })
+RoomBookings.belongsTo(user, { foreignKey: 'userId' })
+RoomBookings.belongsTo(room, { foreignKey: 'roomId' })
 
-module.exports = roomBooking
+module.exports = RoomBookings

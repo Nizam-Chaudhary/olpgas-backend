@@ -35,6 +35,10 @@ module.exports = {
 					type: Sequelize.FLOAT,
 					allowNull: false,
 				},
+				depositAmount: {
+					type: Sequelize.FLOAT,
+					allowNull: false,
+				},
 				payDate: {
 					type: Sequelize.DATE,
 					allowNull: false,
