@@ -57,6 +57,36 @@ class RoomBookingService {
 			throw error
 		}
 	}
+
+	getRoomBookingHistory = async (
+		page = 1,
+		limit = 20,
+		userId,
+		paymentStatus = null,
+	) => {
+		const offset = (page - 1) * limit
+
+		let whereClause = { userId: userId }
+		if (paymentStatus) {
+			whereClause = {
+				...whereClause,
+				paymentStatus: paymentStatus,
+			}
+		}
+		const { rows, count } = await roomBooking.findAndCountAll({
+			where: whereClause,
+			offset: offset,
+			limit: limit,
+		})
+
+		return {
+			status: 'success',
+			totalRecords: count,
+			totalPages: Math.ceil(count / limit),
+			currentPage: page,
+			roomBookingsHistory: rows,
+		}
+	}
 }
 
 module.exports = new RoomBookingService()

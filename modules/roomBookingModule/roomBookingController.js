@@ -15,6 +15,24 @@ class RoomBookingController {
 
 		return res.status(201).json(roomBookingRes)
 	})
+
+	getRoomBookingHistory = catchAsync(async (req, res) => {
+		const { page, limit, paymentStatus } = req.query
+		const userId = req.user.id
+		const roomBookingHistoryRes =
+			await RoomBookingService.getRoomBookingHistory(
+				page,
+				limit,
+				userId,
+				paymentStatus,
+			)
+
+		if (!roomBookingHistoryRes) {
+			throw new AppError('Error fetching room booking history', 400)
+		}
+
+		return res.status(201).json(roomBookingHistoryRes)
+	})
 }
 
 module.exports = new RoomBookingController()
