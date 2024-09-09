@@ -127,6 +127,30 @@ class RoomBookingService {
 			throw error
 		}
 	}
+
+	updateRoomBookingPaymentStatus = async (roomBookingId, paymentStatus) => {
+		const roomBookingRes = await roomBooking.findByPk(roomBookingId)
+
+		if (!['pending', 'paid'].includes(paymentStatus)) {
+			throw new AppError('Invalid payment status', 400)
+		}
+		if (!roomBookingRes) {
+			throw new AppError('Error Room Booking not found', 400)
+		}
+
+		if (paymentStatus === roomBookingRes.paymentStatus) {
+			throw new AppError('Error Room Booking already same status', 400)
+		}
+
+		roomBookingRes.paymentStatus = paymentStatus
+
+		await roomBookingRes.save()
+
+		return {
+			status: 'success',
+			message: 'Payment status updated',
+		}
+	}
 }
 
 module.exports = new RoomBookingService()

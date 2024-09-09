@@ -11,5 +11,6 @@ router
 router
 	.route('/:id')
 	.delete(validateToken, RoomBookingController.cancelRoomBooking)
+	.put(validateToken, RoomBookingController.updateRoomBookingPaymentStatus)
 
 module.exports = router

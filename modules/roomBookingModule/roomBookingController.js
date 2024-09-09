@@ -45,6 +45,22 @@ class RoomBookingController {
 
 		return res.status(201).json(roomBookingCancellationRes)
 	})
+
+	updateRoomBookingPaymentStatus = catchAsync(async (req, res) => {
+		const roomBookingId = req.params.id
+		const paymentStatus = req.body.paymentStatus
+		const updateRoomBookingPaymentStatusRes =
+			await RoomBookingService.updateRoomBookingPaymentStatus(
+				roomBookingId,
+				paymentStatus,
+			)
+
+		if (!updateRoomBookingPaymentStatusRes) {
+			throw new AppError('Error updating room booking payment status', 400)
+		}
+
+		return res.status(201).json(updateRoomBookingPaymentStatusRes)
+	})
 }
 
 module.exports = new RoomBookingController()
