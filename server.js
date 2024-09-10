@@ -1,5 +1,5 @@
 require('dotenv').config()
-const PORT = process.env.APP_PORT
+const PORT = process.env.PORT
 const express = require('express')
 const globalErrorHandler = require('./modules/errorModule/errorController')
 const app = express()
